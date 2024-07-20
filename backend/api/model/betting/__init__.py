@@ -1,7 +1,8 @@
-from .main import *
 import psycopg2
 
-__all__ = ["insertBet", "removeBet"]
+from .main import datacon, getAll, insertBet, removeBet
+
+__all__ = ["insertBet", "removeBet", "getAll"]
 
 
 createTableString = """
@@ -14,12 +15,14 @@ createTableString = """
                     );
                     """
 
+
 def __init__():
     with datacon.cursor() as curs:
         try:
             curs.execute(createTableString)
-        except psycopg2.errors.DuplicateTable as e:
+        except psycopg2.errors.DuplicateTable:
             print("duplicate table encountered")
             pass
-    
+
+
 __init__()

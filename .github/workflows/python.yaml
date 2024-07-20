@@ -1,0 +1,30 @@
+name: Python CI
+
+on:  
+  pull_request:
+    types: [opened, labeled, synchronize]
+    branches: main
+
+defaults:
+  run:
+    working-directory: ./backend
+
+jobs:
+  check-code-quality:
+    if: contains(github.event.pull_request.labels.*.name, 'backend')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4.1.7
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements-combined.txt
+      - name: Run lint with ruff
+        run: ruff .
+      - name: Check formatting with black
+        run: black --check .
+      - name: Check imports with isort
+        run: isort --check .
